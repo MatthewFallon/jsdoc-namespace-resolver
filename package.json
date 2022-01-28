@@ -1,0 +1,15 @@
+{
+  "name": "jsdoc-namespace-resolver",
+  "version": "1.0.0",
+  "description": "This package resolves types based on relative namespaces.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["jsdoc", "jsdoc-namespaces", "jsdoc-plugins"],
+  "author": "Matthew Fallon",
+  "license": "MIT",
+  "devDependencies": {
+    "jsdoc": "^3.6.10"
+  }
+}
