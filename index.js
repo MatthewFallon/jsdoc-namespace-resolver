@@ -9,7 +9,7 @@ function stripArray(type) {
   let newTypeName = type;
   let isArray = false;
   if (type.startsWith("Array.")) {
-    newTypeName = typeName.slice(typeName.indexOf("<") + 1, typeName.length - 1);
+    newTypeName = type.slice(type.indexOf("<") + 1, type.length - 1);
     isArray = true;
   }
 
