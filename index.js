@@ -1,5 +1,46 @@
 const logger = require("jsdoc/util/logger")
 
+/**
+ *
+ * @param {string} type
+ * @return {{newTypeName: string, isArray: boolean}} The new type name after processing.
+ */
+function stripArray(type) {
+  let newTypeName = type;
+  let isArray = false;
+  if (type.startsWith("Array.")) {
+    newTypeName = typeName.slice(typeName.indexOf("<") + 1, typeName.length - 1);
+    isArray = true;
+  }
+
+  return {newTypeName, isArray};
+}
+
+/**
+ *
+ * @param {Object} tag - The tag to process types for.
+ * @param {Object} [tag.type] - The tag's type if it exists.
+ * @param {string[]} tag.type.names - The tags names. always length 1.
+ * @param {string[]} memberArray - Array of members in the same namespace.
+ * @param {string} namespace - The namespace of the current tag's doclet.
+ * @return {Object} The processed tag.
+ */
+function processTypes(tag, memberArray, namespace) {
+  if (tag.type) {
+    let {newTypeName, isArray} = stripArray(tag.type.names[0]);
+    if (memberArray.includes(newTypeName)) { //referencing member map for corresponding types.
+      newTypeName = namespace + "." + newTypeName
+    }
+    if (isArray) {
+      tag.type.names[0] = "Array.<" + newTypeName + ">"
+    } else {
+      tag.type.names[0] = newTypeName
+    }
+    return tag
+  }
+}
+
+
 module.exports.handlers = {
   processingComplete: function (e) { // Handles resolving after all other symbols are imported/resolved
     /**
@@ -36,24 +77,18 @@ module.exports.handlers = {
     for (const namespace in memberFuncMap) {
       for (const memberFunc of memberFuncMap[namespace]) {
         if (memberFunc.params) {
-          for (const param of memberFunc.params) {
-            if (param.type && memberMap[namespace].includes(param.type.names[0])) { //referencing member map for corresponding types.
-              param.type.names[0] = namespace + "." + param.type.names[0]
-            }
+          for (let param of memberFunc.params) {
+            param = processTypes(param,memberMap[namespace], namespace);
           }
         }
         if (memberFunc.exceptions) {
-          for (const exception of memberFunc.exceptions) {
-            if (exception.type && memberMap[namespace].includes(exception.type.names[0])) {
-              exception.type.names[0] = namespace + "." + exception.type.names[0]
-            }
+          for (let exception of memberFunc.exceptions) {
+            exception = processTypes(exception,memberMap[namespace], namespace);
           }
         }
         if (memberFunc.returns) {
-          for (const funcReturn of memberFunc.returns) {
-            if (funcReturn.type && memberMap[namespace].includes(funcReturn.type.names[0])) {
-              funcReturn.type.names[0] = namespace + "." + funcReturn.type.names[0]
-            }
+          for (let funcReturn of memberFunc.returns) {
+            funcReturn = processTypes(funcReturn,memberMap[namespace], namespace);
           }
         }
       }
