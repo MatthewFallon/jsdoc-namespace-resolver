@@ -37,21 +37,21 @@ module.exports.handlers = {
       for (const memberFunc of memberFuncMap[namespace]) {
         if (memberFunc.params) {
           for (const param of memberFunc.params) {
-            if (param.type.names && memberMap[namespace].includes(param.type.names[0])) { //referencing member map for corresponding types.
+            if (param.type && memberMap[namespace].includes(param.type.names[0])) { //referencing member map for corresponding types.
               param.type.names[0] = namespace + "." + param.type.names[0]
             }
           }
         }
         if (memberFunc.exceptions) {
           for (const exception of memberFunc.exceptions) {
-            if (exception.type.names && memberMap[namespace].includes(exception.type.names[0])) {
+            if (exception.type && memberMap[namespace].includes(exception.type.names[0])) {
               exception.type.names[0] = namespace + "." + exception.type.names[0]
             }
           }
         }
         if (memberFunc.returns) {
           for (const funcReturn of memberFunc.returns) {
-            if (funcReturn.type.names && memberMap[namespace].includes(funcReturn.type.names[0])) {
+            if (funcReturn.type && memberMap[namespace].includes(funcReturn.type.names[0])) {
               funcReturn.type.names[0] = namespace + "." + funcReturn.type.names[0]
             }
           }
