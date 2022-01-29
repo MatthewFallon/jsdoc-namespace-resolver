@@ -63,7 +63,7 @@ module.exports.handlers = {
         } else {
           memberMap[doclet.memberof] = [doclet.name]
         }
-        if (doclet.kind === "function") {
+        if (doclet.kind === "function" || doclet.kind === "typedef") {
           if (memberFuncMap[doclet.memberof]) {
             memberFuncMap[doclet.memberof].push(doclet)
           } else {
@@ -89,6 +89,11 @@ module.exports.handlers = {
         if (memberFunc.returns) {
           for (let funcReturn of memberFunc.returns) {
             funcReturn = processTypes(funcReturn,memberMap[namespace], namespace);
+          }
+        }
+        if (memberFunc.properties) {
+          for (let properties of memberFunc.properties) {
+            properties = processTypes(properties,memberMap[namespace], namespace);
           }
         }
       }

@@ -1,6 +1,6 @@
 {
   "name": "jsdoc-namespace-resolver",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "This package resolves types based on relative namespaces.",
   "main": "index.js",
   "scripts": {
